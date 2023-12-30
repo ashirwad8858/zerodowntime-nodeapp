@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Service 
+metadata:
+  name: tms
+  namespace: my-name-space
+spec:
+  selector:
+    app: my-mtach-label
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  types: ClusterIP
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tms
+  namespace: my-name-space
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-mtach-label
+  template:
+    metadata:
+      labels:
+        app: my-mtach-label
+    spec:
+      containers:
+        - name: container_name
+          image: container_image
+          ports:
+            - containerPort: 80
+
+---
+
+apiVersion: apps/v1
+kind: Deploymet 
+metadata:
+  name: tms
+  namespace: tms-space
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-mtach-label
+  template:
+    metadata:
+      labels:
+        app: my-name-space
+
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx
+          ports: 
+            - containerPort: 80
